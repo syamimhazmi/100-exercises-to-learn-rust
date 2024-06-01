@@ -11,26 +11,40 @@ pub struct Ticket {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: String) -> Ticket {
-        if title.is_empty() {
-            panic!("Title cannot be empty");
-        }
-        if title.len() > 50 {
-            panic!("Title cannot be longer than 50 bytes");
-        }
-        if description.is_empty() {
-            panic!("Description cannot be empty");
-        }
-        if description.len() > 500 {
-            panic!("Description cannot be longer than 500 bytes");
-        }
-        if status != "To-Do" && status != "In Progress" && status != "Done" {
-            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
-        }
+        Self::parse_title(&title);
+        Self::parse_description(&description);
+        Self::parse_status(&status);
 
         Ticket {
             title,
             description,
             status,
+        }
+    }
+
+    fn parse_title(title: &String) {
+        if title.is_empty() {
+            panic!("Title cannot be empty");
+        }
+
+        if title.len() > 50 {
+            panic!("Title cannot be longer than 50 bytes");
+        }
+    }
+
+    fn parse_description(description: &String) {
+        if description.is_empty() {
+            panic!("Description cannot be empty");
+        }
+
+        if description.len() > 500 {
+            panic!("Description cannot be longer than 500 bytes");
+        }
+    }
+
+    fn parse_status(status: &String) {
+        if status != "To-Do" && status != "In Progress" && status != "Done" {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
         }
     }
 
@@ -44,6 +58,24 @@ impl Ticket {
 
     pub fn status(&self) -> &String {
         &self.status
+    }
+
+    pub fn set_title(&mut self, title: String) {
+        Self::parse_title(&title);
+
+        self.title = title
+    }
+
+    pub fn set_description(&mut self, description: String) {
+        Self::parse_description(&description);
+
+        self.description = description
+    }
+
+    pub fn set_status(&mut self, status: String) {
+        Self::parse_status(&status);
+
+        self.status = status
     }
 }
 
