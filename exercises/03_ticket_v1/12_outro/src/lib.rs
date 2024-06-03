@@ -1,3 +1,5 @@
+use core::panic;
+
 // TODO: Define a new `Order` type.
 //   It should keep track of three pieces of information: `product_name`, `quantity`, and `unit_price`.
 //   The product name can't be empty and it can't be longer than 300 bytes.
@@ -11,3 +13,86 @@
 // Integration here has a very specific meaning: they test **the public API** of your project.
 // You'll need to pay attention to the visibility of your types and methods; integration
 // tests can't access private or `pub(crate)` items.
+//
+
+pub struct Order {
+    product_name: String,
+    quantity: u32,
+    unit_price: u32
+}
+
+impl Order {
+    pub fn new(product_name: String, quantity: u32, unit_price: u32) -> Self {
+        Self::parse_order(&product_name, &quantity, &unit_price);
+
+        Order {
+            product_name,
+            quantity,
+            unit_price
+        }
+    }
+
+    fn parse_order(product_name: &String, quantity: &u32, unit_price: &u32) {
+        Self::parse_product_name(product_name);
+
+        Self::parse_quantity(quantity);
+
+        Self::parse_unit_price(unit_price);
+    }
+
+    fn parse_product_name(product_name: &String) {
+        if product_name.is_empty() {
+            panic!("Product name can not be empty!");
+        } 
+
+        if product_name.len() > 300 {
+            panic!("Product name can not be longer than 300 characters.");
+        }
+    }
+
+    fn parse_quantity(quantity: &u32) {
+        if quantity == &0 {
+            panic!("Quantity should't be equal or less than zero!");
+        }
+    }
+
+    fn parse_unit_price(unit_price: &u32) { 
+        if unit_price ==  &0 {
+            panic!("Quantity should't be equal or less than zero!");
+        }
+    }
+
+    pub fn product_name(&self) -> &String {
+        &self.product_name
+    }
+
+    pub fn quantity(&self) -> &u32 {
+        &self.quantity
+    }
+
+    pub fn unit_price(&self) -> &u32 {
+        &self.unit_price
+    }
+
+    pub fn total(&self) -> u32 {
+        self.quantity * self.unit_price
+    }
+
+    pub fn set_product_name(&mut self, new_product_name: String) {
+        Self::parse_product_name(&new_product_name);
+
+        self.product_name = new_product_name;
+    }
+
+    pub fn set_quantity(&mut self, new_quantity: u32) {
+        Self::parse_quantity(&new_quantity);
+
+        self.quantity = new_quantity;
+    }
+
+    pub fn set_unit_price(&mut self, new_unit_price: u32) {
+        Self::parse_unit_price(&new_unit_price);
+
+        self.unit_price = new_unit_price;
+    }
+}
